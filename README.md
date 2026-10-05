@@ -117,14 +117,14 @@ Polecenia jakości: `npm run lint` (ESLint + Prettier), `npm run typecheck`, `np
 
 ### Zmienne środowiskowe
 
-| Zmienna                                         | Gdzie                                                  | Opis                                                  |
-| ----------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
-| `VITE_API_URL`                                  | `web/.env.local`, zmienna repozytorium GitHub (`vars`) | Adres workera                                         |
-| `LLM_API_KEY`                                   | sekret Cloudflare / `worker/.dev.vars`                 | Klucz API dostawcy LLM                                |
+| Zmienna                                         | Gdzie                                                  | Opis                                                   |
+| ----------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------ |
+| `VITE_API_URL`                                  | `web/.env.local`, zmienna repozytorium GitHub (`vars`) | Adres workera                                          |
+| `LLM_API_KEY`                                   | sekret Cloudflare / `worker/.dev.vars`                 | Klucz API dostawcy LLM                                 |
 | `LLM_BASE_URL`, `LLM_MODEL`                     | `worker/wrangler.jsonc`                                | Dostawca i model (domyślnie DeepSeek `deepseek-flash`) |
-| `ALLOWED_ORIGINS`                               | `worker/wrangler.jsonc` / `.dev.vars`                  | Dozwolone originy (CORS)                              |
-| `DAILY_LIMIT`                                   | `worker/wrangler.jsonc`                                | Globalny limit analiz na dobę                         |
-| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | sekrety repozytorium GitHub                            | Deploy workera z GitHub Actions                       |
+| `ALLOWED_ORIGINS`                               | `worker/wrangler.jsonc` / `.dev.vars`                  | Dozwolone originy (CORS)                               |
+| `DAILY_LIMIT`                                   | `worker/wrangler.jsonc`                                | Globalny limit analiz na dobę                          |
+| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | sekrety repozytorium GitHub                            | Deploy workera z GitHub Actions                        |
 
 ## CI/CD
 
