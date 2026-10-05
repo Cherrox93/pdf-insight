@@ -47,6 +47,8 @@ export default defineConfig(
       jsxA11y.flatConfigs.recommended,
     ],
     rules: {
+      // Przewijane regiony (role="region") muszą przyjmować fokus, by obsłużyć je klawiaturą.
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['tabpanel', 'region'] }],
       'no-restricted-syntax': [
         'error',
         {

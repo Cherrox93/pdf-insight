@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSP: własne zasoby, API (Cloudflare Workers) i CDN modeli OCR (Tesseract.js). -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' blob: https://cdn.jsdelivr.net; worker-src 'self' blob:; connect-src 'self' blob: data: https://*.workers.dev https://cdn.jsdelivr.net http://localhost:8787; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <meta
+      name="description"
+      content="PDF Insight — wgraj PDF, otrzymaj podsumowanie i uporządkowane dane JSON."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>PDF Insight</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
