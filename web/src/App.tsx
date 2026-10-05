@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Dropzone } from './components/Dropzone';
 import { EmptyState } from './components/EmptyState';
 import { ErrorPanel } from './components/ErrorPanel';
@@ -25,6 +25,13 @@ function usePreventWindowDrop() {
 
 export function App() {
   const analysis = useAnalysis();
+  // Po powrocie do stanu pustego (anuluj / nowa analiza) fokus wraca na wybór pliku.
+  const [refocusFileButton, setRefocusFileButton] = useState(false);
+  const { reset } = analysis;
+  const resetAndRefocus = useCallback(() => {
+    setRefocusFileButton(true);
+    reset();
+  }, [reset]);
   const { state } = analysis;
   usePreventWindowDrop();
 
@@ -53,7 +60,10 @@ export function App() {
         {state.status === 'idle' && (
           <div className="grid gap-8">
             <div className="grid gap-4">
-              <Dropzone onFile={(file) => void analysis.analyzeFile(file)} />
+              <Dropzone
+                onFile={(file) => void analysis.analyzeFile(file)}
+                focusOnMount={refocusFileButton}
+              />
               <PrivacyNotice />
             </div>
             <EmptyState />
@@ -72,7 +82,7 @@ export function App() {
             step={state.step}
             detail={state.detail}
             withOcr={state.withOcr}
-            onCancel={analysis.reset}
+            onCancel={resetAndRefocus}
           />
         )}
 
@@ -81,7 +91,7 @@ export function App() {
             message={state.message}
             canRetry={state.canRetry}
             onRetry={analysis.retry}
-            onReset={analysis.reset}
+            onReset={resetAndRefocus}
           />
         )}
 
@@ -89,7 +99,7 @@ export function App() {
           <ResultView
             insight={state.insight}
             fromHistory={state.fromHistory}
-            onReset={analysis.reset}
+            onReset={resetAndRefocus}
           />
         )}
       </main>

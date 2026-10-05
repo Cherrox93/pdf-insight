@@ -1,12 +1,19 @@
-import { useId, useRef, useState, type DragEvent } from 'react';
+import { useEffect, useId, useRef, useState, type DragEvent } from 'react';
 
 interface DropzoneProps {
   onFile: (file: File) => void;
+  /** Ustawia fokus na przycisku wyboru pliku (powrót z wyniku/błędu — fokus nie ginie). */
+  focusOnMount?: boolean;
 }
 
 /** F-01: drag & drop oraz wybór pliku. Obsługa klawiaturą przez natywny przycisk. */
-export function Dropzone({ onFile }: DropzoneProps) {
+export function Dropzone({ onFile, focusOnMount = false }: DropzoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (focusOnMount) buttonRef.current?.focus();
+  }, [focusOnMount]);
   const hintId = useId();
   const [isDragging, setIsDragging] = useState(false);
 
@@ -58,6 +65,7 @@ export function Dropzone({ onFile }: DropzoneProps) {
         </p>
       </div>
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => inputRef.current?.click()}
         aria-describedby={hintId}
