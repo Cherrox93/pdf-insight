@@ -11,6 +11,7 @@ export default {
           baseUrl: env.LLM_BASE_URL,
           apiKey: env.LLM_API_KEY,
           model: env.LLM_MODEL,
+          disableThinking: env.LLM_DISABLE_THINKING === 'true',
         })
       : null;
     return handleRequest(request, env, { llm });

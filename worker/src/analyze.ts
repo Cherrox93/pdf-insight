@@ -106,11 +106,9 @@ function ensureSentenceEnd(sentence: string): string {
 }
 
 function ocrWarning(pages: number[]): string {
-  const subject =
-    pages.length === 1
-      ? `Strona ${pages[0] ?? ''} została odczytana`
-      : `Strony ${pages.join(', ')} zostały odczytane`;
-  return `${subject} za pomocą OCR — dane z nich mogą zawierać błędy rozpoznawania.`;
+  return pages.length === 1
+    ? `Strona ${pages[0] ?? ''} została odczytana za pomocą OCR — dane z niej mogą zawierać błędy rozpoznawania.`
+    : `Strony ${pages.join(', ')} zostały odczytane za pomocą OCR — dane z nich mogą zawierać błędy rozpoznawania.`;
 }
 
 interface BuildContext {

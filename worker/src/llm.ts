@@ -36,6 +36,11 @@ export interface OpenAiCompatibleOptions {
   model: string;
   timeoutMs?: number;
   maxTokens?: number;
+  /**
+   * Wyłącza tryb „thinking” (parametr DeepSeek). Ekstrakcja danych nie wymaga rozumowania,
+   * a bez niego odpowiedź jest ok. 3× szybsza (wymóg: wynik < 30 s).
+   */
+  disableThinking?: boolean;
   fetchFn?: typeof fetch;
 }
 
@@ -44,7 +49,14 @@ export interface OpenAiCompatibleOptions {
  * Zmiana dostawcy = zmiana LLM_BASE_URL / LLM_MODEL / LLM_API_KEY, bez zmian w kodzie.
  */
 export function createOpenAiCompatibleClient(options: OpenAiCompatibleOptions): LlmClient {
-  const { baseUrl, apiKey, model, timeoutMs = 45_000, maxTokens = 4096 } = options;
+  const {
+    baseUrl,
+    apiKey,
+    model,
+    timeoutMs = 45_000,
+    maxTokens = 4096,
+    disableThinking = false,
+  } = options;
   const fetchFn = options.fetchFn ?? fetch;
   const endpoint = `${baseUrl.replace(/\/+$/, '')}/chat/completions`;
 
@@ -66,6 +78,7 @@ export function createOpenAiCompatibleClient(options: OpenAiCompatibleOptions): 
             max_tokens: maxTokens,
             response_format: { type: 'json_object' },
             stream: false,
+            ...(disableThinking && { thinking: { type: 'disabled' } }),
           }),
           signal: AbortSignal.timeout(timeoutMs),
         });
