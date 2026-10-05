@@ -1,8 +1,12 @@
+import { z } from 'zod';
 import type { Env } from './env';
 import { handleRequest } from './handler';
 import { createOpenAiCompatibleClient } from './llm';
 
 export { UsageCounter } from './usage';
+
+// Cloudflare Workers nie pozwalają na `new Function` - Zod nie próbuje kompilacji JIT.
+z.config({ jitless: true });
 
 export default {
   fetch(request, env) {
