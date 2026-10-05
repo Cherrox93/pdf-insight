@@ -12,10 +12,13 @@ function makeEnv(options: { rateLimitOk?: boolean; quotaOk?: boolean } = {}): En
     LLM_MODEL: 'fake-model',
     ALLOWED_ORIGINS: `${ORIGIN}, http://localhost:5173`,
     DAILY_LIMIT: '300',
-    RATE_LIMITER: { limit: () => Promise.resolve({ success: rateLimitOk }) },
+    RATE_LIMIT_PER_MINUTE: '10',
     USAGE: {
       idFromName: () => ({}),
-      get: () => ({ tryConsume: () => Promise.resolve(quotaOk) }),
+      get: () => ({
+        checkRate: () => Promise.resolve(rateLimitOk),
+        tryConsume: () => Promise.resolve(quotaOk),
+      }),
     },
   } as unknown as Env;
 }

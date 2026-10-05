@@ -12,6 +12,7 @@ export interface Env {
   ALLOWED_ORIGINS: string;
   /** Globalny limit analiz na dobę (ochrona salda API). */
   DAILY_LIMIT: string;
-  RATE_LIMITER: RateLimit;
+  /** Limit analiz na minutę z jednego adresu IP. */
+  RATE_LIMIT_PER_MINUTE: string;
   USAGE: DurableObjectNamespace<UsageCounter>;
 }

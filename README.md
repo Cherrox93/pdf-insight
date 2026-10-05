@@ -78,7 +78,7 @@ docs/                zrzuty ekranu
 | Warstwa  | Technologie                                                                                       |
 | -------- | ------------------------------------------------------------------------------------------------- |
 | Frontend | React 19, Vite 8, TypeScript 6 (`strict`), Tailwind CSS 4, pdf.js 6, Tesseract.js 7, lucide-react |
-| Backend  | Cloudflare Workers, Durable Objects, Rate Limiting                                                |
+| Backend  | Cloudflare Workers, Durable Objects (limity)                                                      |
 | AI       | DeepSeek `deepseek-flash` (V4.1 Flash) przez API zgodne z OpenAI                                  |
 | Wspólne  | Zod 4 (schemat i walidacja)                                                                       |
 | Jakość   | ESLint 9 (typescript-eslint strict, jsx-a11y), Prettier, Vitest 5, gitleaks                       |
@@ -95,7 +95,7 @@ docs/                zrzuty ekranu
 | **Podsumowanie jako tablica zdań** w odpowiedzi modelu   | Reguła „3–5 zdań” jest wymuszana walidacją, a nie zawodnym liczeniem kropek („sp. z o.o.”)                           |
 | **`fileName`, `pages`, `meta` ustawia kod**, nie model   | Modelu nie pytamy o fakty, które znamy na pewno                                                                      |
 | **Grounding** - kwoty i daty muszą występować w tekście  | Niezweryfikowane pozycje są usuwane i wymieniane w `meta.warnings` („model nie zgaduje”)                             |
-| **Durable Object jako dzienny licznik**                  | Spójny licznik (KV jest „ostatecznie spójne”), ochrona salda API przed nadużyciem                                    |
+| **Durable Object jako licznik limitów**                  | Spójne liczniki: dokładnie 10 analiz/min na IP i limit dzienny chroniący saldo API                                   |
 | **Brak routera** + `404.html`                            | Aplikacja ma jeden widok; `404.html` (kopia `index.html`) zabezpiecza odświeżenie dowolnej ścieżki                   |
 | **pdf.js i Tesseract.js ładowane dynamicznie**           | Pierwsze otwarcie strony: ok. 110 KB JS (gzip) zamiast ok. 240 KB; OCR pobierany tylko dla skanów                    |
 | **Fonty hostowane lokalnie** (Geist przez Fontsource)    | Zgodność z CSP (bez zewnętrznych arkuszy), przeglądarka pobiera tylko potrzebne zakresy znaków                       |
@@ -148,7 +148,7 @@ Walidacja (Zod): `language` - ISO 639-1, `type` - `faktura|umowa|oferta|raport|i
 
 - **Klucz API** wyłącznie jako sekret workera (`wrangler secret put LLM_API_KEY`); nigdy we frontendzie ani w repozytorium. CI uruchamia **gitleaks** na pełnej historii.
 - **CORS** ograniczony do `https://cherrox93.github.io` (CORS nie jest uwierzytelnieniem - dlatego dodatkowo limity).
-- **Limity**: 10 analiz/min na IP (Cloudflare Rate Limiting), globalnie 300 analiz/dobę, `Content-Length` ≤ 1,5 MB, ≤ 300 tys. znaków tekstu, plik ≤ 10 MB.
+- **Limity**: dokładnie 10 analiz/min na IP i globalnie 300 analiz/dobę (spójny Durable Object - wbudowany Rate Limiting Cloudflare jest przybliżony i w testach przepuszczał ok. 25 żądań), `Content-Length` ≤ 1,5 MB, ≤ 300 tys. znaków tekstu, plik ≤ 10 MB.
 - **Prompt injection**: treść PDF w delimiterach z losowym identyfikatorem, prompt systemowy traktujący ją jako dane, tryb JSON bez narzędzi, flaga `injectionDetected` + niezależna heurystyka, grounding kwot/dat. Plik testowy zawiera taką próbę - aplikacja ją ignoruje i ostrzega.
 - **XSS**: brak `dangerouslySetInnerHTML` (wymuszone regułą ESLint), cała treść renderowana jako tekst (także kolorowanie JSON), Content-Security-Policy.
 - **Informacja o przetwarzaniu**: komunikat przy wgrywaniu pliku, że tekst trafia do zewnętrznego API AI.
@@ -156,7 +156,7 @@ Walidacja (Zod): `language` - ISO 639-1, `type` - `faktura|umowa|oferta|raport|i
 
 ## Testy
 
-- **113 testów jednostkowych (Vitest)**: schemat i walidacja (37), worker - grounding, retry, chunking, CORS, limity, klient LLM (59), frontend - walidacja pliku, historia, tokenizer JSON, formatowanie (17).
+- **118 testów jednostkowych (Vitest)**: schemat i walidacja (37), worker - grounding, retry, chunking, CORS, limity, klient LLM (64), frontend - walidacja pliku, historia, tokenizer JSON, formatowanie (17).
 - **Testy end-to-end** na żywym demo (Playwright): pełna analiza pliku testowego, stany błędów, historia po przeładowaniu, obsługa klawiaturą, zrzuty w obu motywach przy 1280 i 360 px. Skrypty uruchamiane lokalnie (nie są częścią CI, bo zużywają API).
 
 ## Uruchomienie lokalne
@@ -186,7 +186,7 @@ Polecenia jakości: `npm run lint` (ESLint + Prettier), `npm run typecheck`, `np
 | `LLM_BASE_URL`, `LLM_MODEL`                     | `worker/wrangler.jsonc`                                | Dostawca i model (domyślnie DeepSeek `deepseek-flash`)                                 |
 | `LLM_DISABLE_THINKING`                          | `worker/wrangler.jsonc`                                | `"true"` wyłącza tryb rozumowania DeepSeek (ok. 3× szybciej; ekstrakcja go nie wymaga) |
 | `ALLOWED_ORIGINS`                               | `worker/wrangler.jsonc` / `.dev.vars`                  | Dozwolone originy (CORS)                                                               |
-| `DAILY_LIMIT`                                   | `worker/wrangler.jsonc`                                | Globalny limit analiz na dobę                                                          |
+| `DAILY_LIMIT`, `RATE_LIMIT_PER_MINUTE`          | `worker/wrangler.jsonc`                                | Globalny limit analiz na dobę i limit na minutę z jednego IP                           |
 | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | sekrety repozytorium GitHub                            | Deploy workera z GitHub Actions (bez nich krok jest pomijany)                          |
 
 ## CI/CD

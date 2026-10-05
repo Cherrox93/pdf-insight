@@ -10,18 +10,24 @@ export interface Deps {
   now?: () => Date;
 }
 
+const RATE_WINDOW_MS = 60_000;
+
+function usageCounter(env: Env) {
+  return env.USAGE.get(env.USAGE.idFromName('global'));
+}
+
 async function enforceRateLimit(request: Request, env: Env): Promise<void> {
   const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
-  const { success } = await env.RATE_LIMITER.limit({ key: ip });
-  if (!success) {
+  const limit = Number(env.RATE_LIMIT_PER_MINUTE) || 10;
+  const allowed = await usageCounter(env).checkRate(ip, limit, RATE_WINDOW_MS);
+  if (!allowed) {
     throw new HttpError(429, 'RATE_LIMITED', 'Zbyt wiele analiz w krótkim czasie.');
   }
 }
 
 async function consumeDailyQuota(env: Env, now: Date): Promise<void> {
   const limit = Number(env.DAILY_LIMIT) || 300;
-  const counter = env.USAGE.get(env.USAGE.idFromName('global'));
-  const allowed = await counter.tryConsume(now.toISOString().slice(0, 10), limit);
+  const allowed = await usageCounter(env).tryConsume(now.toISOString().slice(0, 10), limit);
   if (!allowed) {
     throw new HttpError(429, 'DAILY_LIMIT', 'Wyczerpano dzienny limit analiz demo.');
   }
