@@ -46,13 +46,18 @@ const SCALES: { factor: number; words: string }[] = [
   { factor: 1e9, words: 'mld|miliard\\w*|billion\\w*' },
 ];
 
-const NUMBER_START = "(?<!\\d)(?<!\\d[ .,'])";
+// Początek liczby: brak cyfry przed nią ani grupy tysięcy („1 200 000” ≠ 200 000) — chyba że
+// poprzedza ją część dziesiętna innej liczby, np. sąsiednia kolumna tabeli („55 350,00 12 730,50”).
+const NUMBER_START = "(?<!\\d)(?<!(?<![.,]\\d?)\\d[ .,'])";
 const NUMBER_END = "(?![ .,']?\\d)";
 
 export function isAmountGrounded(value: number, normalizedText: string): boolean {
-  const patterns = numberVariants(value).map(
-    (variant) => `${NUMBER_START}${escapeRegExp(variant)}${NUMBER_END}`,
-  );
+  // Zapis z częścią dziesiętną („55 350,00”) jednoznacznie kończy liczbę — kolejna liczba
+  // po spacji to sąsiednia kolumna tabeli („55 350,00 12 730,50”), a nie dalsze cyfry.
+  const patterns = numberVariants(value).map((variant) => {
+    const end = /[.,]\d{1,2}$/.test(variant) ? '(?!\\d)' : NUMBER_END;
+    return `${NUMBER_START}${escapeRegExp(variant)}${end}`;
+  });
 
   // Zapisy skrócone: „4,2 mln zł” → 4 200 000
   for (const { factor, words } of SCALES) {

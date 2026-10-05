@@ -33,6 +33,14 @@ describe('isAmountGrounded', () => {
     expect(isAmountGrounded(value, text)).toBe(false);
   });
 
+  it('znajduje kwoty w wierszu tabeli z sąsiednimi kolumnami liczbowymi', () => {
+    // Wiersz z faktury zaliczkowej w pliku testowym (regresja: 55 350 PLN było odrzucane).
+    const row = normalizeText('Razem 55 350,00 12 730,50 68 080,50\nDo zapłaty: 68 080,50 zł');
+    for (const value of [55350, 12730.5, 68080.5]) {
+      expect(isAmountGrounded(value, row)).toBe(true);
+    }
+  });
+
   it('nie dopasowuje fragmentu większej liczby', () => {
     expect(isAmountGrounded(200000, normalizeText('kapitał 1 200 000,00 zł'))).toBe(false);
     expect(isAmountGrounded(675, normalizeText('27 675,00 zł'))).toBe(false);
