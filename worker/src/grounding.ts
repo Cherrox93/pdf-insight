@@ -46,9 +46,10 @@ const SCALES: { factor: number; words: string }[] = [
   { factor: 1e9, words: 'mld|miliard\\w*|billion\\w*' },
 ];
 
-// Początek liczby: brak cyfry przed nią ani grupy tysięcy („1 200 000” ≠ 200 000) - chyba że
-// poprzedza ją część dziesiętna innej liczby, np. sąsiednia kolumna tabeli („55 350,00 12 730,50”).
-const NUMBER_START = "(?<!\\d)(?<!(?<![.,]\\d?)\\d[ .,'])";
+// Początek liczby: brak cyfry przed nią ani poprzedzającej grupy tysięcy („1 200 000” ≠ 200 000).
+// Grupa tysięcy to samodzielny ciąg 1–3 cyfr, więc nie blokuje nas sąsiednia kolumna tabeli:
+// część dziesiętna („55 350,00 12 730,50”) ani rok („październik 2026 1 200,00 zł”).
+const NUMBER_START = "(?<!\\d)(?<!(?<![\\d.,])\\d{1,3}[ .,'])";
 const NUMBER_END = "(?![ .,']?\\d)";
 
 export function isAmountGrounded(value: number, normalizedText: string): boolean {

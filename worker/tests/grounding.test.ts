@@ -41,6 +41,15 @@ describe('isAmountGrounded', () => {
     }
   });
 
+  it('znajduje kwotę poprzedzoną rokiem w sąsiedniej kolumnie tabeli', () => {
+    // Regresja z testu E2E na fakturze: „1 200,00 zł” było odrzucane przez „2026 ” przed kwotą.
+    const row = normalizeText(
+      '2 Pielęgnacja zieleni - październik 2026\n1 200,00 zł 8% 1 296,00 zł',
+    );
+    expect(isAmountGrounded(1200, row)).toBe(true);
+    expect(isAmountGrounded(1296, row)).toBe(true);
+  });
+
   it('nie dopasowuje fragmentu większej liczby', () => {
     expect(isAmountGrounded(200000, normalizeText('kapitał 1 200 000,00 zł'))).toBe(false);
     expect(isAmountGrounded(675, normalizeText('27 675,00 zł'))).toBe(false);
