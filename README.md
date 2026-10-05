@@ -49,6 +49,7 @@ worker/src         API proxy: handler, CORS, limity, prompt, klient LLM, chunkin
 | **`fileName`, `pages`, `meta` ustawia kod**, nie model   | Modelu nie pytamy o fakty, które znamy na pewno                                                                      |
 | **Grounding** — kwoty i daty muszą występować w tekście  | Niezweryfikowane pozycje są usuwane i zgłaszane w `meta.warnings` („model nie zgaduje”)                              |
 | **Durable Object jako dzienny licznik**                  | Spójny licznik (KV jest „ostatecznie spójne”), ochrona salda API przed nadużyciem                                    |
+| **DeepSeek bez trybu „thinking”**                        | Pomiar na pliku testowym: ~10 s zamiast 15–24 s przy tej samej jakości wyniku (wymóg DoD: < 30 s)                    |
 | **Brak routera** + `404.html`                            | Aplikacja ma jeden widok; `404.html` (kopia `index.html`) zabezpiecza odświeżenie dowolnej ścieżki                   |
 | **pdf.js i Tesseract.js ładowane dynamicznie**           | Pierwsze otwarcie strony: ~100 KB gzip zamiast ~230 KB; OCR pobierany tylko dla skanów                               |
 
@@ -117,14 +118,15 @@ Polecenia jakości: `npm run lint` (ESLint + Prettier), `npm run typecheck`, `np
 
 ### Zmienne środowiskowe
 
-| Zmienna                                         | Gdzie                                                  | Opis                                                   |
-| ----------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------ |
-| `VITE_API_URL`                                  | `web/.env.local`, zmienna repozytorium GitHub (`vars`) | Adres workera                                          |
-| `LLM_API_KEY`                                   | sekret Cloudflare / `worker/.dev.vars`                 | Klucz API dostawcy LLM                                 |
-| `LLM_BASE_URL`, `LLM_MODEL`                     | `worker/wrangler.jsonc`                                | Dostawca i model (domyślnie DeepSeek `deepseek-flash`) |
-| `ALLOWED_ORIGINS`                               | `worker/wrangler.jsonc` / `.dev.vars`                  | Dozwolone originy (CORS)                               |
-| `DAILY_LIMIT`                                   | `worker/wrangler.jsonc`                                | Globalny limit analiz na dobę                          |
-| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | sekrety repozytorium GitHub                            | Deploy workera z GitHub Actions                        |
+| Zmienna                                         | Gdzie                                                  | Opis                                                                                   |
+| ----------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `VITE_API_URL`                                  | `web/.env.local`, zmienna repozytorium GitHub (`vars`) | Adres workera                                                                          |
+| `LLM_API_KEY`                                   | sekret Cloudflare / `worker/.dev.vars`                 | Klucz API dostawcy LLM                                                                 |
+| `LLM_BASE_URL`, `LLM_MODEL`                     | `worker/wrangler.jsonc`                                | Dostawca i model (domyślnie DeepSeek `deepseek-flash`)                                 |
+| `LLM_DISABLE_THINKING`                          | `worker/wrangler.jsonc`                                | `"true"` wyłącza tryb rozumowania DeepSeek (ok. 3× szybciej; ekstrakcja go nie wymaga) |
+| `ALLOWED_ORIGINS`                               | `worker/wrangler.jsonc` / `.dev.vars`                  | Dozwolone originy (CORS)                                                               |
+| `DAILY_LIMIT`                                   | `worker/wrangler.jsonc`                                | Globalny limit analiz na dobę                                                          |
+| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | sekrety repozytorium GitHub                            | Deploy workera z GitHub Actions                                                        |
 
 ## CI/CD
 
@@ -136,5 +138,5 @@ Polecenia jakości: `npm run lint` (ESLint + Prettier), `npm run typecheck`, `np
 - **DeepSeek** nie ma darmowego tieru (koszt to ułamki centa za analizę) i przetwarza dane poza UE. W trybie JSON nie wymusza schematu — kompensuje to walidacja Zod z ponowną próbą.
 - **Grounding dat** rozpoznaje zapisy słowne po polsku, angielsku i niemiecku; w innych językach daty nie są weryfikowane.
 - Pliki PDF zabezpieczone hasłem nie są obsługiwane.
-- Czas analizy zależy od obciążenia dostawcy LLM (typowo kilkanaście sekund).
+- Czas analizy zależy od obciążenia dostawcy LLM — dla 12-stronicowego pliku testowego (z OCR jednej strony) typowo ok. 10 s.
 - Wyniki generuje AI — mimo walidacji i groundingu mogą zawierać błędy interpretacji.
