@@ -2,7 +2,7 @@ import type { Insight } from '@pdf-insight/schema';
 import { describe, expect, it } from 'vitest';
 import { jsonFileName } from './download';
 import { hasPdfSignature, MAX_FILE_BYTES, validatePdfFile } from './fileValidation';
-import { formatAmount, formatDate } from './format';
+import { formatAmount, formatDate, initials, timeAgo } from './format';
 import {
   addToHistory,
   HISTORY_LIMIT,
@@ -10,6 +10,7 @@ import {
   removeFromHistory,
   type KeyValueStorage,
 } from './history';
+import { tokenizeJson } from './jsonTokens';
 import { joinTextItems, meaningfulLength } from './text';
 
 function memoryStorage(): KeyValueStorage {
@@ -128,7 +129,37 @@ describe('history (F-09)', () => {
   });
 });
 
+describe('tokenizeJson', () => {
+  it('rozpoznaje klucze, napisy, liczby i literały, zachowując cały tekst', () => {
+    const json = '{\n  "a": "x: y",\n  "b": -12.5,\n  "c": null\n}';
+    const tokens = tokenizeJson(json);
+    expect(tokens.map((t) => t.text).join('')).toBe(json);
+    expect(tokens.filter((t) => t.type === 'key').map((t) => t.text)).toEqual([
+      '"a"',
+      '"b"',
+      '"c"',
+    ]);
+    expect(tokens.find((t) => t.type === 'string')?.text).toBe('"x: y"');
+    expect(tokens.find((t) => t.type === 'number')?.text).toBe('-12.5');
+    expect(tokens.find((t) => t.type === 'literal')?.text).toBe('null');
+  });
+
+  it('obsługuje cudzysłowy ucieczki w napisach', () => {
+    const tokens = tokenizeJson('{"k": "a \\"b\\" c"}');
+    expect(tokens.find((t) => t.type === 'string')?.text).toBe('"a \\"b\\" c"');
+  });
+});
+
 describe('format', () => {
+  it('tworzy inicjały i czas względny', () => {
+    expect(initials('Anna Kowalczyk')).toBe('AK');
+    expect(initials('łukasz')).toBe('Ł');
+    const now = new Date('2026-10-06T12:00:00Z');
+    expect(timeAgo('2026-10-06T11:59:30Z', now)).toBe('przed chwilą');
+    expect(timeAgo('2026-10-06T11:55:00Z', now)).toBe('5 minut temu');
+    expect(timeAgo('2026-10-05T12:00:00Z', now)).toBe('wczoraj');
+  });
+
   it('formatuje nazwę pliku eksportu', () => {
     expect(jsonFileName('Umowa 14-2026.PDF')).toBe('Umowa 14-2026-insight.json');
     expect(jsonFileName('a/b:c.pdf')).toBe('a_b_c-insight.json');

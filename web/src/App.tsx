@@ -1,4 +1,6 @@
+import { Sparkles } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { AppFooter, AppHeader } from './components/AppHeader';
 import { Dropzone } from './components/Dropzone';
 import { EmptyState } from './components/EmptyState';
 import { ErrorPanel } from './components/ErrorPanel';
@@ -27,52 +29,61 @@ export function App() {
   const analysis = useAnalysis();
   // Po powrocie do stanu pustego (anuluj / nowa analiza) fokus wraca na wybór pliku.
   const [refocusFileButton, setRefocusFileButton] = useState(false);
-  const { reset } = analysis;
+  const { reset, state } = analysis;
   const resetAndRefocus = useCallback(() => {
     setRefocusFileButton(true);
     reset();
   }, [reset]);
-  const { state } = analysis;
   usePreventWindowDrop();
 
   return (
     <div className="flex min-h-screen flex-col">
+      <div className="app-backdrop" aria-hidden="true" />
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:rounded focus:bg-accent focus:px-3 focus:py-2 focus:text-bg"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-xl focus:bg-accent focus:px-4 focus:py-2 focus:font-medium focus:text-accent-ink"
       >
         Przejdź do treści
       </a>
 
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-4">
-          <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="h-8 w-8" />
-          <div>
-            <p className="text-lg font-bold tracking-tight">PDF Insight</p>
-            <p className="text-xs text-muted">Podsumowanie i dane strukturalne z dokumentów PDF</p>
-          </div>
-        </div>
-      </header>
+      <AppHeader onLogoClick={resetAndRefocus} />
 
-      <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
-        <h1 className="sr-only">PDF Insight — analiza dokumentów PDF</h1>
-
+      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
         {state.status === 'idle' && (
-          <div className="grid gap-8">
-            <div className="grid gap-4">
-              <Dropzone
-                onFile={(file) => void analysis.analyzeFile(file)}
-                focusOnMount={refocusFileButton}
-              />
-              <PrivacyNotice />
+          <div className="space-y-14">
+            <div className="mx-auto max-w-3xl space-y-8">
+              <div className="animate-fade-up space-y-4 text-center">
+                <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted backdrop-blur">
+                  <Sparkles className="size-3.5 text-accent-text" aria-hidden="true" />
+                  Analiza dokumentów z AI
+                </p>
+                <h1 className="text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl">
+                  Zamień PDF w <span className="text-gradient">konkretne dane</span>
+                </h1>
+                <p className="mx-auto max-w-xl text-base text-pretty text-muted sm:text-lg">
+                  Wgraj umowę, fakturę lub raport — otrzymasz krótkie podsumowanie, kluczowe punkty,
+                  kwoty, daty i podmioty w formacie JSON.
+                </p>
+              </div>
+              <div className="animate-fade-up space-y-3 [animation-delay:80ms]">
+                <Dropzone
+                  onFile={(file) => void analysis.analyzeFile(file)}
+                  focusOnMount={refocusFileButton}
+                />
+                <PrivacyNotice />
+              </div>
             </div>
-            <EmptyState />
-            <HistoryPanel
-              entries={analysis.history}
-              onOpen={analysis.showFromHistory}
-              onRemove={analysis.removeHistoryEntry}
-              onClear={analysis.clearAllHistory}
-            />
+            <div className="animate-fade-up [animation-delay:160ms]">
+              <EmptyState />
+            </div>
+            <div className="animate-fade-up [animation-delay:220ms]">
+              <HistoryPanel
+                entries={analysis.history}
+                onOpen={analysis.showFromHistory}
+                onRemove={analysis.removeHistoryEntry}
+                onClear={analysis.clearAllHistory}
+              />
+            </div>
           </div>
         )}
 
@@ -104,12 +115,7 @@ export function App() {
         )}
       </main>
 
-      <footer className="border-t border-border">
-        <div className="mx-auto max-w-5xl px-4 py-4 text-xs text-muted">
-          Wyniki generuje AI i mogą zawierać błędy — weryfikuj je z dokumentem źródłowym. Tekst
-          dokumentu jest przetwarzany przez zewnętrzne API AI (DeepSeek).
-        </div>
-      </footer>
+      <AppFooter />
     </div>
   );
 }

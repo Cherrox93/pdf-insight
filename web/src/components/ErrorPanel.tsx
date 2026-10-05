@@ -1,4 +1,6 @@
+import { FileUp, RotateCcw, TriangleAlert } from 'lucide-react';
 import { useEffect, useRef } from 'react';
+import { buttonPrimary, buttonSecondary } from '../lib/styles';
 
 interface ErrorPanelProps {
   message: string;
@@ -19,27 +21,29 @@ export function ErrorPanel({ message, canRetry, onRetry, onReset }: ErrorPanelPr
     <section
       role="alert"
       aria-labelledby="error-heading"
-      className="rounded-xl border border-danger/50 bg-danger/5 p-6 sm:p-8"
+      className="card animate-fade-up mx-auto flex max-w-2xl flex-col items-center px-6 py-10 text-center sm:px-10"
     >
-      <h2 id="error-heading" ref={headingRef} tabIndex={-1} className="text-xl font-semibold">
+      <span className="flex size-14 items-center justify-center rounded-2xl bg-danger-soft text-danger">
+        <TriangleAlert className="size-7" aria-hidden="true" />
+      </span>
+      <h2
+        id="error-heading"
+        ref={headingRef}
+        tabIndex={-1}
+        className="mt-5 text-xl font-semibold tracking-tight"
+      >
         Nie udało się przeanalizować dokumentu
       </h2>
-      <p className="mt-2 text-danger">{message}</p>
-      <div className="mt-6 flex flex-wrap gap-3">
+      <p className="mt-2 max-w-md text-muted">{message}</p>
+      <div className="mt-7 flex flex-wrap justify-center gap-3">
         {canRetry && (
-          <button
-            type="button"
-            onClick={onRetry}
-            className="rounded-lg bg-accent px-5 py-2.5 font-semibold text-bg hover:bg-accent/90"
-          >
+          <button type="button" onClick={onRetry} className={buttonPrimary}>
+            <RotateCcw aria-hidden="true" />
             Spróbuj ponownie
           </button>
         )}
-        <button
-          type="button"
-          onClick={onReset}
-          className="rounded-lg border border-border px-5 py-2.5 hover:border-text"
-        >
+        <button type="button" onClick={onReset} className={buttonSecondary}>
+          <FileUp aria-hidden="true" />
           Wybierz inny plik
         </button>
       </div>

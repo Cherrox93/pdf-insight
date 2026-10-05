@@ -31,6 +31,31 @@ export function formatDateTime(isoDateTime: string): string {
   );
 }
 
+/** „2 min temu”, „wczoraj”, „3 dni temu”. */
+export function timeAgo(isoDateTime: string, now: Date = new Date()): string {
+  const seconds = Math.round((new Date(isoDateTime).getTime() - now.getTime()) / 1000);
+  const rtf = new Intl.RelativeTimeFormat('pl-PL', { numeric: 'auto' });
+  const units: [Intl.RelativeTimeFormatUnit, number][] = [
+    ['day', 86_400],
+    ['hour', 3_600],
+    ['minute', 60],
+  ];
+  for (const [unit, size] of units) {
+    if (Math.abs(seconds) >= size) return rtf.format(Math.round(seconds / size), unit);
+  }
+  return 'przed chwilą';
+}
+
+/** Inicjały do awatara: „Anna Kowalczyk” → „AK”. */
+export function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toLocaleUpperCase('pl-PL') ?? '')
+    .join('');
+}
+
 export function languageName(code: string): string {
   try {
     return new Intl.DisplayNames(['pl'], { type: 'language' }).of(code) ?? code;

@@ -1,16 +1,211 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
 
-@theme {
-  --color-bg: #0d0d0d;
-  --color-surface: #171717;
-  --color-border: #2e2e2e;
-  --color-text: #f2f2f2;
-  --color-muted: #b3b3b3;
-  --color-accent: #c6f432;
-  --color-danger: #ff8a80;
-  --color-warning: #ffd166;
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+/*
+ * Tokeny motywu. Jasny w :root, ciemny w [data-theme='dark'] (ustawiane przez public/theme-init.js
+ * przed pierwszym renderem, na podstawie wyboru użytkownika lub ustawień systemu).
+ * Kontrast tekstu ≥ 4.5:1 (WCAG AA) w obu motywach.
+ */
+:root {
+  --bg: #f5f6f2;
+  --surface: rgb(255 255 255 / 0.72);
+  --surface-solid: #ffffff;
+  --surface-muted: #eef0ea;
+  --border: rgb(15 23 20 / 0.09);
+  --border-strong: rgb(15 23 20 / 0.16);
+  --text: #101511;
+  --muted: #545d57;
+  --accent: #c6f432;
+  --accent-hover: #b6e620;
+  --accent-ink: #101511;
+  --accent-text: #3f6212;
+  --accent-soft: rgb(198 244 50 / 0.22);
+  --violet: #6d5bd0;
+  --violet-soft: rgb(109 91 208 / 0.1);
+  --warning: #8a4b05;
+  --warning-soft: rgb(245 158 11 / 0.12);
+  --danger: #b42318;
+  --danger-soft: rgb(240 68 56 / 0.1);
+  --glow-1: rgb(198 244 50 / 0.35);
+  --glow-2: rgb(139 124 246 / 0.18);
+  --grid: rgb(15 23 20 / 0.05);
+  --shadow: 0 1px 2px rgb(16 21 17 / 0.04), 0 8px 24px -12px rgb(16 21 17 / 0.12);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #08090b;
+  --surface: rgb(255 255 255 / 0.04);
+  --surface-solid: #111317;
+  --surface-muted: rgb(255 255 255 / 0.06);
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --text: #f3f5f2;
+  --muted: #a3aaa5;
+  --accent: #c6f432;
+  --accent-hover: #d6ff5c;
+  --accent-ink: #0b0f05;
+  --accent-text: #d4ff4a;
+  --accent-soft: rgb(198 244 50 / 0.12);
+  --violet: #a99cff;
+  --violet-soft: rgb(139 124 246 / 0.14);
+  --warning: #fcd34d;
+  --warning-soft: rgb(251 191 36 / 0.1);
+  --danger: #fca5a5;
+  --danger-soft: rgb(248 113 113 / 0.1);
+  --glow-1: rgb(198 244 50 / 0.13);
+  --glow-2: rgb(139 124 246 / 0.16);
+  --grid: rgb(255 255 255 / 0.035);
+  --shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 12px 32px -16px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-solid: var(--surface-solid);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-violet: var(--violet);
+  --color-violet-soft: var(--violet-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --shadow-card: var(--shadow);
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'cv11';
+  min-width: 320px;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Dekoracyjne tło: poświaty i delikatna siatka, wygaszana ku dołowi. */
+.app-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 30rem at 15% -10%, var(--glow-1), transparent 60%),
+    radial-gradient(50rem 28rem at 95% 0%, var(--glow-2), transparent 60%);
+}
+
+.app-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+/* Karta „szklana” — wspólny wygląd paneli. */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--text) 20%, var(--accent-text) 55%, var(--violet) 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Animowana ramka strefy upuszczania (aktywna przy najechaniu i przeciąganiu). */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.dropzone-ring {
+  position: relative;
+  isolation: isolate;
+}
+
+.dropzone-ring::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    var(--accent) 12%,
+    var(--violet) 26%,
+    transparent 40%
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: spin-angle 4s linear infinite;
+}
+
+.dropzone-ring:hover::before,
+.dropzone-ring[data-dragging='true']::before {
+  opacity: 1;
+}
+
+@keyframes spin-angle {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes progress {
@@ -18,24 +213,42 @@
     transform: translateX(-100%);
   }
   100% {
-    transform: translateX(300%);
+    transform: translateX(350%);
   }
 }
 
-html {
-  color-scheme: dark;
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-soft);
+  }
+  70% {
+    box-shadow: 0 0 0 14px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  min-width: 320px;
+.animate-fade-up {
+  animation: fade-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.skeleton {
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    var(--surface-muted) 25%,
+    var(--border-strong) 50%,
+    var(--surface-muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
 }
 
 /* Nagłówki otrzymują fokus programowo (dla czytników ekranu) — bez ramki, bo nie są interaktywne. */
@@ -43,11 +256,20 @@ body {
   outline: none;
 }
 
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

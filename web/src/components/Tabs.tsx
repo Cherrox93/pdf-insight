@@ -3,6 +3,7 @@ import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
 interface Tab {
   id: string;
   label: string;
+  icon?: ReactNode;
   content: ReactNode;
 }
 
@@ -20,21 +21,14 @@ export function Tabs({ tabs, activeId, onChange, label }: TabsProps) {
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
     const last = tabs.length - 1;
-    const target =
-      event.key === 'ArrowRight'
-        ? index === last
-          ? 0
-          : index + 1
-        : event.key === 'ArrowLeft'
-          ? index === 0
-            ? last
-            : index - 1
-          : event.key === 'Home'
-            ? 0
-            : event.key === 'End'
-              ? last
-              : null;
-    if (target === null) return;
+    const targets: Record<string, number> = {
+      ArrowRight: index === last ? 0 : index + 1,
+      ArrowLeft: index === 0 ? last : index - 1,
+      Home: 0,
+      End: last,
+    };
+    const target = targets[event.key];
+    if (target === undefined) return;
     event.preventDefault();
     const tab = tabs[target];
     if (tab) {
@@ -45,7 +39,11 @@ export function Tabs({ tabs, activeId, onChange, label }: TabsProps) {
 
   return (
     <div>
-      <div role="tablist" aria-label={label} className="flex gap-1 border-b border-border">
+      <div
+        role="tablist"
+        aria-label={label}
+        className="inline-flex gap-1 rounded-xl border border-border bg-surface-muted p-1"
+      >
         {tabs.map((tab, index) => {
           const selected = tab.id === activeId;
           return (
@@ -66,12 +64,11 @@ export function Tabs({ tabs, activeId, onChange, label }: TabsProps) {
               onKeyDown={(event) => {
                 handleKeyDown(event, index);
               }}
-              className={`-mb-px border-b-2 px-4 py-2 font-medium ${
-                selected
-                  ? 'border-accent text-text'
-                  : 'border-transparent text-muted hover:text-text'
+              className={`inline-flex items-center gap-2 rounded-lg px-4 py-1.5 text-sm font-medium transition-all [&_svg]:size-4 ${
+                selected ? 'bg-surface-solid text-text shadow-card' : 'text-muted hover:text-text'
               }`}
             >
+              {tab.icon}
               {tab.label}
             </button>
           );
@@ -84,7 +81,7 @@ export function Tabs({ tabs, activeId, onChange, label }: TabsProps) {
           id={`${baseId}-panel-${tab.id}`}
           aria-labelledby={`${baseId}-tab-${tab.id}`}
           hidden={tab.id !== activeId}
-          className="pt-6"
+          className="pt-5"
         >
           {tab.id === activeId && tab.content}
         </div>

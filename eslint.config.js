@@ -63,5 +63,10 @@ export default defineConfig(
     files: ['**/*.js'],
     languageOptions: { globals: globals.node },
   },
+  {
+    // Skrypty statyczne serwowane wprost do przeglądarki (np. inicjalizacja motywu).
+    files: ['web/public/**/*.js'],
+    languageOptions: { globals: globals.browser, sourceType: 'script' },
+  },
   prettier,
 );
