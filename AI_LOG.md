@@ -13,7 +13,7 @@ Każdy fragment kodu został przeze mnie przejrzany; decyzje architektoniczne (p
 
 1. **Analiza wymagań i plan**
 
-   > „Najpierw zapoznaj się w pełni z dokumentami (brief + PDF testowy), przygotuj plan wszystkiego, co aplikacja ma zawierać, jak działać oraz spełniać wszystkie wymogi, i przedstaw pełną architekturę. Kodowaniem zajmiemy się, kiedy będziemy mieć gotowy plan.”
+   > „Najpierw zapoznaj się w pełni z dokumentami (brief + PDF testowy), przygotuj plan wszystkiego co aplikacja ma zawierać, jak działać oraz jakie wymogi spełniać i przedstaw pełną architekturę. Kodowaniem zajmiemy się, kiedy będziemy mieć gotowy plan.”
 
    Efekt: lista pułapek w pliku testowym (prompt injection na str. 4, skan aneksu bez warstwy tekstowej na str. 11, trzy waluty, fragment po angielsku, mylące kwoty typu budżet/kapitał zakładowy), architektura front → proxy → LLM, plan commitów.
 
