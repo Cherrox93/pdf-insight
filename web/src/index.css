@@ -38,6 +38,11 @@ body {
   outline-offset: 2px;
 }
 
+/* Nagłówki otrzymują fokus programowo (dla czytników ekranu) — bez ramki, bo nie są interaktywne. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

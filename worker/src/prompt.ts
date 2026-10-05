@@ -44,7 +44,7 @@ FIELDS
 - document.date: the date the document was issued/signed (YYYY-MM-DD), otherwise null.
 - summarySentences: 3 to 5 complete, neutral, factual sentences that together summarise the whole document: parties, subject, key money, key timeline, important changes.
 - keyPoints: 3 to 7 short, concrete facts (include numbers where relevant).
-- entities.organizations: companies and institutions named in the document — full names as written, no duplicates.
+- entities.organizations: companies, institutions and public bodies that are parties or actors in the document — full legal names as written, no duplicates. Do NOT include products, software, systems or brands (e.g. "SAP Business One", "Microsoft 365").
 - entities.people: full names of natural persons in the nominative case (e.g. "Anna Kowalczyk", not "Annę Kowalczyk"), no duplicates, no roles or e-mails.
 - amounts: the most important monetary amounts (max 15).
   · "value": a JSON number with a dot as decimal separator and no thousands separators ("184 500,00 zł" → 184500.00, "4,2 mln zł" → 4200000).

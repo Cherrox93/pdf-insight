@@ -105,6 +105,14 @@ function ensureSentenceEnd(sentence: string): string {
   return /[.!?…]$/.test(trimmed) ? trimmed : `${trimmed}.`;
 }
 
+function ocrWarning(pages: number[]): string {
+  const subject =
+    pages.length === 1
+      ? `Strona ${pages[0] ?? ''} została odczytana`
+      : `Strony ${pages.join(', ')} zostały odczytane`;
+  return `${subject} za pomocą OCR — dane z nich mogą zawierać błędy rozpoznawania.`;
+}
+
 interface BuildContext {
   fileName: string;
   pages: number;
@@ -122,10 +130,10 @@ export function buildInsight(analysis: LlmAnalysis, ctx: BuildContext): Insight 
 
   // Kwoty: zostawiamy tylko te, które występują w tekście; duplikaty (wartość+waluta) łączymy.
   const amounts = new Map<string, LlmAnalysis['amounts'][number]>();
-  let droppedAmounts = 0;
+  const droppedAmounts: string[] = [];
   for (const amount of analysis.amounts) {
     if (!isAmountGrounded(amount.value, text)) {
-      droppedAmounts++;
+      droppedAmounts.push(`${amount.value} ${amount.currency} (${amount.context})`);
       continue;
     }
     const key = `${amount.value.toFixed(2)}|${amount.currency}`;
@@ -135,10 +143,10 @@ export function buildInsight(analysis: LlmAnalysis, ctx: BuildContext): Insight 
   // Daty: weryfikujemy, gdy znamy zapis słowny miesięcy w języku dokumentu.
   const checkDates = DATE_GROUNDING_LANGUAGES.has(analysis.document.language);
   const dates = new Map<string, string[]>();
-  let droppedDates = 0;
+  const droppedDates: string[] = [];
   for (const entry of analysis.dates) {
     if (checkDates && !isDateGrounded(entry.date, text)) {
-      droppedDates++;
+      droppedDates.push(`${entry.date} (${entry.context})`);
       continue;
     }
     const contexts = dates.get(entry.date) ?? [];
@@ -151,14 +159,14 @@ export function buildInsight(analysis: LlmAnalysis, ctx: BuildContext): Insight 
       ? analysis.document.date
       : null;
 
-  if (droppedAmounts > 0) {
+  if (droppedAmounts.length > 0) {
     warnings.push(
-      `Pominięto kwoty niezweryfikowane w treści dokumentu (${droppedAmounts}) — mogły być błędnie odczytane przez AI.`,
+      `Pominięto kwoty, których nie znaleziono w treści dokumentu (możliwy błąd AI): ${droppedAmounts.join('; ')}.`,
     );
   }
-  if (droppedDates > 0) {
+  if (droppedDates.length > 0) {
     warnings.push(
-      `Pominięto daty niezweryfikowane w treści dokumentu (${droppedDates}) — mogły być błędnie odczytane przez AI.`,
+      `Pominięto daty, których nie znaleziono w treści dokumentu (możliwy błąd AI): ${droppedDates.join('; ')}.`,
     );
   }
   if (analysis.injectionDetected || looksLikePromptInjection(ctx.fullText)) {
@@ -167,9 +175,7 @@ export function buildInsight(analysis: LlmAnalysis, ctx: BuildContext): Insight 
     );
   }
   if (ctx.ocrPages.length > 0) {
-    warnings.push(
-      `Strony ${ctx.ocrPages.join(', ')} odczytano za pomocą OCR — dane z nich mogą zawierać błędy rozpoznawania.`,
-    );
+    warnings.push(ocrWarning(ctx.ocrPages));
   }
 
   const insight: Insight = {
