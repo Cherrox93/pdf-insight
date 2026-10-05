@@ -87,6 +87,8 @@ jobs:
           cache: npm
       - run: npm ci
       # Klucz LLM nie przechodzi przez CI — jest ustawiony jako sekret workera w Cloudflare.
+      # Bez tokenu Cloudflare krok jest pomijany (worker można wdrożyć lokalnie: npx wrangler deploy).
       - name: wrangler deploy
+        if: env.CLOUDFLARE_API_TOKEN != ''
         run: npx wrangler deploy
         working-directory: worker

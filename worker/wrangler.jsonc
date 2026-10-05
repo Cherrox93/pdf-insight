@@ -9,7 +9,7 @@
   "vars": {
     "ALLOWED_ORIGINS": "https://cherrox93.github.io",
     "LLM_BASE_URL": "https://api.deepseek.com",
-    "LLM_MODEL": "deepseek-chat",
+    "LLM_MODEL": "deepseek-flash",
     "DAILY_LIMIT": "300",
   },
 

@@ -31,7 +31,7 @@ describe('insightSchema', () => {
       ...validInsight(),
       meta: {
         schemaVersion: '1.0',
-        model: 'deepseek-chat',
+        model: 'deepseek-flash',
         analyzedAt: '2026-10-05T12:00:00Z',
         chunks: 1,
         ocrPages: [11],

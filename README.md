@@ -76,7 +76,7 @@ Zgodny z sekcją 04 briefu; dodane jest wyłącznie pole `meta` (pola można dod
   "keywords": ["CRM", "SLA"],
   "meta": {
     "schemaVersion": "1.0",
-    "model": "deepseek-chat",
+    "model": "deepseek-flash",
     "analyzedAt": "2026-10-06T10:00:00.000Z",
     "chunks": 1,
     "ocrPages": [11],
@@ -121,7 +121,7 @@ Polecenia jakości: `npm run lint` (ESLint + Prettier), `npm run typecheck`, `np
 | ----------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
 | `VITE_API_URL`                                  | `web/.env.local`, zmienna repozytorium GitHub (`vars`) | Adres workera                                         |
 | `LLM_API_KEY`                                   | sekret Cloudflare / `worker/.dev.vars`                 | Klucz API dostawcy LLM                                |
-| `LLM_BASE_URL`, `LLM_MODEL`                     | `worker/wrangler.jsonc`                                | Dostawca i model (domyślnie DeepSeek `deepseek-chat`) |
+| `LLM_BASE_URL`, `LLM_MODEL`                     | `worker/wrangler.jsonc`                                | Dostawca i model (domyślnie DeepSeek `deepseek-flash`) |
 | `ALLOWED_ORIGINS`                               | `worker/wrangler.jsonc` / `.dev.vars`                  | Dozwolone originy (CORS)                              |
 | `DAILY_LIMIT`                                   | `worker/wrangler.jsonc`                                | Globalny limit analiz na dobę                         |
 | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | sekrety repozytorium GitHub                            | Deploy workera z GitHub Actions                       |

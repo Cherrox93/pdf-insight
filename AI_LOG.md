@@ -5,7 +5,7 @@
 | Narzędzie                                                 | Zastosowanie                                                                                                                    |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | **Claude Code** (rozszerzenie VS Code, model Claude Opus) | Analiza briefu i pliku testowego, plan architektury, generowanie kodu, testów, CI i dokumentacji, przegląd błędów lintera/typów |
-| **DeepSeek API** (`deepseek-chat`)                        | Model wykorzystywany przez aplikację do analizy dokumentów (runtime, nie do pisania kodu)                                       |
+| **DeepSeek API** (`deepseek-flash`)                        | Model wykorzystywany przez aplikację do analizy dokumentów (runtime, nie do pisania kodu)                                       |
 
 Każdy fragment kodu został przeze mnie przejrzany; decyzje architektoniczne (poniżej) podejmowałem świadomie, porównując warianty zaproponowane przez AI.
 
