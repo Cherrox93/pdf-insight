@@ -48,7 +48,7 @@ export function HistoryPanel({ entries, onOpen, onRemove, onClear }: HistoryPane
                     <FileText className="size-5" aria-hidden="true" />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">
+                    <span className="line-clamp-2 text-sm font-medium break-words">
                       {document.title ?? document.fileName}
                     </span>
                     <span className="mt-0.5 block truncate text-xs text-muted">

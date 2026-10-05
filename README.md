@@ -4,7 +4,9 @@ Aplikacja webowa, która wczytuje plik PDF, tworzy jego krótkie podsumowanie i 
 
 **Demo:** https://cherrox93.github.io/pdf-insight/
 
-![Zrzut ekranu PDF Insight](docs/screenshot.png)
+![Wynik analizy — motyw ciemny](docs/screenshot.png)
+
+![Ekran startowy — motyw jasny](docs/screenshot-start.png)
 
 ## Jak to działa
 
