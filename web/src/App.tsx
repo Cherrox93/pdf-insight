@@ -61,7 +61,7 @@ export function App() {
                   Zamień PDF w <span className="text-gradient">konkretne dane</span>
                 </h1>
                 <p className="mx-auto max-w-xl text-base text-pretty text-muted sm:text-lg">
-                  Wgraj umowę, fakturę lub raport — otrzymasz krótkie podsumowanie, kluczowe punkty,
+                  Wgraj umowę, fakturę lub raport - otrzymasz krótkie podsumowanie, kluczowe punkty,
                   kwoty, daty i podmioty w formacie JSON.
                 </p>
               </div>

@@ -78,7 +78,7 @@ export async function handleRequest(request: Request, env: Env, deps: Deps): Pro
   } catch (error) {
     const httpError = toHttpError(error);
     if (httpError.status >= 500) {
-      // Logujemy wyłącznie typ błędu — nigdy treści dokumentu.
+      // Logujemy wyłącznie typ błędu - nigdy treści dokumentu.
       console.error(
         JSON.stringify({
           event: 'analyze_failed',

@@ -31,7 +31,7 @@ export function AppHeader({ onLogoClick }: AppHeaderProps) {
           type="button"
           onClick={onLogoClick}
           className="group flex items-center gap-2.5 rounded-xl"
-          aria-label="PDF Insight — strona główna"
+          aria-label="PDF Insight - strona główna"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-[#7ddc4a] text-accent-ink shadow-[0_6px_20px_-8px_var(--accent)] transition-transform group-hover:-rotate-6">
             <FileSearch className="size-5" strokeWidth={2.2} aria-hidden="true" />
@@ -69,7 +69,7 @@ export function AppFooter() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <p>
-          Wyniki generuje AI i mogą zawierać błędy — weryfikuj je z dokumentem źródłowym. Tekst
+          Wyniki generuje AI i mogą zawierać błędy - weryfikuj je z dokumentem źródłowym. Tekst
           dokumentu jest przetwarzany przez zewnętrzne API AI (DeepSeek).
         </p>
         <a

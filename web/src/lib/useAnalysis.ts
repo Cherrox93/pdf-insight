@@ -12,7 +12,7 @@ import {
 import { MAX_OCR_PAGES, recognizePages } from './ocr';
 import { meaningfulLength, MIN_PAGE_CHARS, PdfReadError } from './text';
 
-/** Zgodne z limitem serwera — poniżej nie da się uczciwie napisać 3–5 zdań podsumowania. */
+/** Zgodne z limitem serwera - poniżej nie da się uczciwie napisać 3–5 zdań podsumowania. */
 const MIN_DOCUMENT_CHARS = 200;
 
 export type Step = 'extract' | 'ocr' | 'analyze';
@@ -32,7 +32,7 @@ export function useAnalysis() {
   const [history, setHistory] = useState<HistoryEntry[]>(() => loadHistory());
   const controllerRef = useRef<AbortController | null>(null);
   const fileRef = useRef<File | null>(null);
-  /** Wyekstrahowany tekst — ponowienie nie wymaga ponownego odczytu i OCR. */
+  /** Wyekstrahowany tekst - ponowienie nie wymaga ponownego odczytu i OCR. */
   const payloadRef = useRef<{ payload: AnalyzePayload; clientWarnings: string[] } | null>(null);
 
   const startController = () => {
@@ -94,7 +94,7 @@ export function useAnalysis() {
       }
 
       try {
-        // pdf.js (~400 KB) ładujemy dopiero po wybraniu pliku — szybsze pierwsze otwarcie strony.
+        // pdf.js (~400 KB) ładujemy dopiero po wybraniu pliku - szybsze pierwsze otwarcie strony.
         const { extractPdfText } = await import('./pdfExtract');
         const extracted = await extractPdfText(await file.arrayBuffer(), (page, total) => {
           processing('extract', `Odczyt tekstu: strona ${page} z ${total}`);
@@ -127,7 +127,7 @@ export function useAnalysis() {
             }
           } catch {
             clientWarnings.push(
-              'Nie udało się odczytać stron zeskanowanych (OCR) — analiza obejmuje tylko warstwę tekstową.',
+              'Nie udało się odczytać stron zeskanowanych (OCR) - analiza obejmuje tylko warstwę tekstową.',
             );
           }
         }
@@ -165,7 +165,7 @@ export function useAnalysis() {
     [sendForAnalysis],
   );
 
-  /** F-06: ponowienie — bez ponownego odczytu pliku, jeśli tekst jest już wyodrębniony. */
+  /** F-06: ponowienie - bez ponownego odczytu pliku, jeśli tekst jest już wyodrębniony. */
   const retry = useCallback(() => {
     const saved = payloadRef.current;
     if (saved) {

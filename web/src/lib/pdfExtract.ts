@@ -1,5 +1,5 @@
 import { getDocument, GlobalWorkerOptions, type PDFDocumentProxy } from 'pdfjs-dist';
-// Vite zwraca URL workera z uwzględnieniem `base` (/pdf-insight/) — pułapka GitHub Pages.
+// Vite zwraca URL workera z uwzględnieniem `base` (/pdf-insight/) - pułapka GitHub Pages.
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
 import { joinTextItems, meaningfulLength, MIN_PAGE_CHARS, PdfReadError } from './text';
@@ -9,7 +9,7 @@ GlobalWorkerOptions.workerSrc = workerUrl;
 export interface ExtractedPdf {
   pdf: PDFDocumentProxy;
   pagesText: string[];
-  /** Numery stron (od 1) bez warstwy tekstowej — kandydaci do OCR. */
+  /** Numery stron (od 1) bez warstwy tekstowej - kandydaci do OCR. */
   emptyPages: number[];
   /** Zwalnia dokument i worker pdf.js. */
   release: () => Promise<void>;

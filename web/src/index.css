@@ -125,7 +125,7 @@ body {
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
 }
 
-/* Karta „szklana” — wspólny wygląd paneli. */
+/* Karta „szklana” - wspólny wygląd paneli. */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -251,7 +251,7 @@ body {
   border-radius: 0.5rem;
 }
 
-/* Nagłówki otrzymują fokus programowo (dla czytników ekranu) — bez ramki, bo nie są interaktywne. */
+/* Nagłówki otrzymują fokus programowo (dla czytników ekranu) - bez ramki, bo nie są interaktywne. */
 [tabindex='-1']:focus {
   outline: none;
 }

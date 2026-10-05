@@ -105,7 +105,7 @@ function Overview({ insight }: { insight: Insight }) {
           <p className="text-[15px] leading-relaxed sm:text-base">{insight.summary}</p>
         </Panel>
 
-        {/* Na wąskich ekranach kluczowe punkty zaraz po podsumowaniu (na desktopie — w bocznej kolumnie). */}
+        {/* Na wąskich ekranach kluczowe punkty zaraz po podsumowaniu (na desktopie - w bocznej kolumnie). */}
         <KeyPoints points={insight.keyPoints} className="lg:hidden" />
 
         <Panel title="Kwoty" icon={<Coins aria-hidden="true" />}>
@@ -247,7 +247,7 @@ export function ResultView({ insight, fromHistory, onReset }: ResultViewProps) {
       await navigator.clipboard.writeText(json);
       setToast('Skopiowano JSON do schowka');
     } catch {
-      setToast('Nie udało się skopiować — użyj zakładki JSON');
+      setToast('Nie udało się skopiować - użyj zakładki JSON');
     }
   };
 
@@ -387,7 +387,7 @@ export function ResultView({ insight, fromHistory, onReset }: ResultViewProps) {
         ]}
       />
 
-      {/* Toast — komunikat o akcji (dla czytników ekranu przez role=status). */}
+      {/* Toast - komunikat o akcji (dla czytników ekranu przez role=status). */}
       <div
         role="status"
         aria-live="polite"

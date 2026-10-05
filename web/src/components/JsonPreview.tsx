@@ -13,7 +13,7 @@ const TOKEN_CLASSES: Record<JsonTokenType, string> = {
   plain: 'text-muted',
 };
 
-/** F-05: podgląd JSON z kolorowaniem składni — renderowany jako tekst (bez dangerouslySetInnerHTML). */
+/** F-05: podgląd JSON z kolorowaniem składni - renderowany jako tekst (bez dangerouslySetInnerHTML). */
 export function JsonPreview({ json }: JsonPreviewProps) {
   const tokens = useMemo(() => tokenizeJson(json), [json]);
   const lineCount = useMemo(() => json.split('\n').length, [json]);

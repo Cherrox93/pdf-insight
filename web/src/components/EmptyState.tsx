@@ -24,7 +24,7 @@ const STEPS = [
   },
 ];
 
-/** F-06: stan pusty — krótka instrukcja dla osoby, która widzi aplikację pierwszy raz. */
+/** F-06: stan pusty - krótka instrukcja dla osoby, która widzi aplikację pierwszy raz. */
 export function EmptyState() {
   return (
     <section aria-labelledby="how-it-works" className="space-y-4">

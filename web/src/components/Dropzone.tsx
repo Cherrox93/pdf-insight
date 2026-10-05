@@ -4,7 +4,7 @@ import { buttonPrimary } from '../lib/styles';
 
 interface DropzoneProps {
   onFile: (file: File) => void;
-  /** Ustawia fokus na przycisku wyboru pliku (powrót z wyniku/błędu — fokus nie ginie). */
+  /** Ustawia fokus na przycisku wyboru pliku (powrót z wyniku/błędu - fokus nie ginie). */
   focusOnMount?: boolean;
 }
 
@@ -70,7 +70,7 @@ export function Dropzone({ onFile, focusOnMount = false }: DropzoneProps) {
           {isDragging ? 'Upuść plik, aby rozpocząć' : 'Przeciągnij i upuść plik PDF'}
         </p>
         <p id={hintId} className="text-sm text-muted">
-          albo wybierz go z dysku — analiza zajmuje zwykle kilkanaście sekund
+          albo wybierz go z dysku - analiza zajmuje zwykle kilkanaście sekund
         </p>
       </div>
 

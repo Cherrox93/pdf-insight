@@ -12,7 +12,7 @@ const entrySchema = z.object({
 
 export type HistoryEntry = z.infer<typeof entrySchema>;
 
-/** Minimalny interfejs Storage — ułatwia testy i obsługę braku localStorage. */
+/** Minimalny interfejs Storage - ułatwia testy i obsługę braku localStorage. */
 export type KeyValueStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
 function defaultStorage(): KeyValueStorage | null {
@@ -43,11 +43,11 @@ function saveHistory(entries: HistoryEntry[], storage: KeyValueStorage | null): 
   try {
     storage.setItem(STORAGE_KEY, JSON.stringify(entries));
   } catch {
-    // brak miejsca lub zablokowany zapis — historia jest tylko udogodnieniem
+    // brak miejsca lub zablokowany zapis - historia jest tylko udogodnieniem
   }
 }
 
-/** Zapisuje wynik na początku listy (bez tekstu PDF — tylko wynik analizy). */
+/** Zapisuje wynik na początku listy (bez tekstu PDF - tylko wynik analizy). */
 export function addToHistory(insight: Insight, storage = defaultStorage()): HistoryEntry[] {
   const entry: HistoryEntry = {
     id: crypto.randomUUID(),
@@ -69,6 +69,6 @@ export function clearHistory(storage = defaultStorage()): void {
   try {
     storage?.removeItem(STORAGE_KEY);
   } catch {
-    // ignorujemy — patrz saveHistory
+    // ignorujemy - patrz saveHistory
   }
 }

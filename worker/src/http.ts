@@ -40,7 +40,7 @@ export function jsonResponse(
   });
 }
 
-/** Odpowiedź błędu: tylko kod i komunikat — bez stack trace i surowej odpowiedzi modelu. */
+/** Odpowiedź błędu: tylko kod i komunikat - bez stack trace i surowej odpowiedzi modelu. */
 export function errorResponse(error: HttpError, headers: Record<string, string> = {}): Response {
   return jsonResponse(
     { error: { code: error.code, message: error.message } },

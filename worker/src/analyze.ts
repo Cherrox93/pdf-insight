@@ -107,8 +107,8 @@ function ensureSentenceEnd(sentence: string): string {
 
 function ocrWarning(pages: number[]): string {
   return pages.length === 1
-    ? `Strona ${pages[0] ?? ''} została odczytana za pomocą OCR — dane z niej mogą zawierać błędy rozpoznawania.`
-    : `Strony ${pages.join(', ')} zostały odczytane za pomocą OCR — dane z nich mogą zawierać błędy rozpoznawania.`;
+    ? `Strona ${pages[0] ?? ''} została odczytana za pomocą OCR - dane z niej mogą zawierać błędy rozpoznawania.`
+    : `Strony ${pages.join(', ')} zostały odczytane za pomocą OCR - dane z nich mogą zawierać błędy rozpoznawania.`;
 }
 
 interface BuildContext {
@@ -223,7 +223,7 @@ export async function analyzeDocument(
     ocr: ocrPages.has(index + 1),
   }));
 
-  // Losowy identyfikator delimitera — treść PDF nie może „zamknąć” bloku dokumentu.
+  // Losowy identyfikator delimitera - treść PDF nie może „zamknąć” bloku dokumentu.
   const id = crypto.randomUUID().slice(0, 8);
   const chunks = splitIntoChunks(pages);
 

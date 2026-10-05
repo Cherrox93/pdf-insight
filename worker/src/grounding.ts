@@ -1,5 +1,5 @@
 /*
- * Grounding — sprawdzenie, czy kwoty i daty zwrócone przez model rzeczywiście
+ * Grounding - sprawdzenie, czy kwoty i daty zwrócone przez model rzeczywiście
  * występują w tekście dokumentu. Chroni przed halucynacjami („model nie zgaduje”).
  * Szukamy wszystkich typowych zapisów danej wartości zamiast parsować liczby z tekstu,
  * bo tabele z PDF sklejają sąsiednie kolumny („30.04.2026 15% 27 675,00 zł”).
@@ -46,13 +46,13 @@ const SCALES: { factor: number; words: string }[] = [
   { factor: 1e9, words: 'mld|miliard\\w*|billion\\w*' },
 ];
 
-// Początek liczby: brak cyfry przed nią ani grupy tysięcy („1 200 000” ≠ 200 000) — chyba że
+// Początek liczby: brak cyfry przed nią ani grupy tysięcy („1 200 000” ≠ 200 000) - chyba że
 // poprzedza ją część dziesiętna innej liczby, np. sąsiednia kolumna tabeli („55 350,00 12 730,50”).
 const NUMBER_START = "(?<!\\d)(?<!(?<![.,]\\d?)\\d[ .,'])";
 const NUMBER_END = "(?![ .,']?\\d)";
 
 export function isAmountGrounded(value: number, normalizedText: string): boolean {
-  // Zapis z częścią dziesiętną („55 350,00”) jednoznacznie kończy liczbę — kolejna liczba
+  // Zapis z częścią dziesiętną („55 350,00”) jednoznacznie kończy liczbę - kolejna liczba
   // po spacji to sąsiednia kolumna tabeli („55 350,00 12 730,50”), a nie dalsze cyfry.
   const patterns = numberVariants(value).map((variant) => {
     const end = /[.,]\d{1,2}$/.test(variant) ? '(?!\\d)' : NUMBER_END;

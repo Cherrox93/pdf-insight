@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0 # pełna historia — gitleaks skanuje wszystkie commity
+          fetch-depth: 0 # pełna historia - gitleaks skanuje wszystkie commity
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
@@ -86,7 +86,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      # Klucz LLM nie przechodzi przez CI — jest ustawiony jako sekret workera w Cloudflare.
+      # Klucz LLM nie przechodzi przez CI - jest ustawiony jako sekret workera w Cloudflare.
       # Bez tokenu Cloudflare krok jest pomijany (worker można wdrożyć lokalnie: npx wrangler deploy).
       - name: wrangler deploy
         if: env.CLOUDFLARE_API_TOKEN != ''

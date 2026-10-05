@@ -21,7 +21,7 @@ function applyTheme(preference: ThemePreference) {
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
 }
 
-/** Motyw: systemowy / jasny / ciemny — zapamiętywany w przeglądarce. */
+/** Motyw: systemowy / jasny / ciemny - zapamiętywany w przeglądarce. */
 export function useTheme() {
   const [preference, setPreference] = useState<ThemePreference>(readPreference);
 

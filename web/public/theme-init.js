@@ -1,10 +1,10 @@
-// Ustawia motyw przed pierwszym renderem (bez „mignięcia”). Osobny plik — CSP blokuje skrypty inline.
+// Ustawia motyw przed pierwszym renderem (bez „mignięcia”). Osobny plik - CSP blokuje skrypty inline.
 (function () {
   var preference = 'system';
   try {
     preference = localStorage.getItem('pdf-insight:theme') || 'system';
   } catch {
-    // brak dostępu do localStorage — używamy ustawień systemu
+    // brak dostępu do localStorage - używamy ustawień systemu
   }
   var dark =
     preference === 'dark' ||

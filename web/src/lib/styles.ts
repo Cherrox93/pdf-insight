@@ -1,4 +1,4 @@
-/** Wspólne klasy przycisków — spójny wygląd i stany hover/active/disabled w całej aplikacji. */
+/** Wspólne klasy przycisków - spójny wygląd i stany hover/active/disabled w całej aplikacji. */
 const base =
   'inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0';
 

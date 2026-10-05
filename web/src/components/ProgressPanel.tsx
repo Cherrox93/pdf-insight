@@ -17,7 +17,7 @@ const STEPS: Record<Step, { label: string; icon: typeof Sparkles }> = {
   analyze: { label: 'Analiza AI', icon: Sparkles },
 };
 
-/** F-06: stan ładowania — kroki, postęp, licznik czasu i szkielet przyszłego wyniku. */
+/** F-06: stan ładowania - kroki, postęp, licznik czasu i szkielet przyszłego wyniku. */
 export function ProgressPanel({ fileName, step, detail, withOcr, onCancel }: ProgressPanelProps) {
   const [elapsed, setElapsed] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -119,7 +119,7 @@ export function ProgressPanel({ fileName, step, detail, withOcr, onCancel }: Pro
         </div>
       </section>
 
-      {/* Szkielet wyniku — sygnalizuje, czego się spodziewać. */}
+      {/* Szkielet wyniku - sygnalizuje, czego się spodziewać. */}
       <div className="grid gap-4 sm:grid-cols-3" aria-hidden="true">
         <div className="card space-y-3 p-6 sm:col-span-2">
           <div className="skeleton h-3 w-24" />

@@ -1,6 +1,6 @@
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 
-/** Limit stron OCR — rozpoznawanie trwa kilka sekund na stronę (wymóg: wynik < 30 s). */
+/** Limit stron OCR - rozpoznawanie trwa kilka sekund na stronę (wymóg: wynik < 30 s). */
 export const MAX_OCR_PAGES = 5;
 const RENDER_SCALE = 2;
 
@@ -17,7 +17,7 @@ async function renderPage(pdf: PDFDocumentProxy, pageNumber: number): Promise<HT
 
 /**
  * F-10: rozpoznaje tekst stron bez warstwy tekstowej (skanów).
- * Tesseract.js ładowany jest dynamicznie — tylko gdy dokument zawiera skany.
+ * Tesseract.js ładowany jest dynamicznie - tylko gdy dokument zawiera skany.
  */
 export async function recognizePages(
   pdf: PDFDocumentProxy,

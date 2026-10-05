@@ -3,7 +3,7 @@ dist/
 coverage/
 *.tsbuildinfo
 
-# Sekrety — nigdy w repozytorium
+# Sekrety - nigdy w repozytorium
 .env
 .env.*
 !.env.example

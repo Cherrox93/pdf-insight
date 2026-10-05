@@ -4,16 +4,16 @@ Aplikacja webowa, która wczytuje plik PDF, tworzy jego krótkie podsumowanie i 
 
 **Demo:** https://cherrox93.github.io/pdf-insight/
 
-![Wynik analizy — motyw ciemny](docs/screenshot.png)
+![Wynik analizy - motyw ciemny](docs/screenshot.png)
 
-![Ekran startowy — motyw jasny](docs/screenshot-start.png)
+![Ekran startowy - motyw jasny](docs/screenshot-start.png)
 
 ## Jak to działa
 
-1. **Wgranie PDF** — przeciągnij plik lub wybierz go z dysku (tylko PDF, maks. 10 MB; sprawdzana jest też sygnatura `%PDF-`).
-2. **Odczyt tekstu** — w przeglądarce przez pdf.js; strony bez warstwy tekstowej (skany) przez OCR (Tesseract.js, `pol+eng`).
-3. **Analiza AI** — tekst trafia do API proxy (Cloudflare Worker), które wywołuje model językowy i waliduje wynik.
-4. **Wynik** — podsumowanie, kluczowe punkty, podmioty, kwoty, daty, słowa kluczowe, podgląd JSON i pobranie pliku `.json`.
+1. **Wgranie PDF** - przeciągnij plik lub wybierz go z dysku (tylko PDF, maks. 10 MB; sprawdzana jest też sygnatura `%PDF-`).
+2. **Odczyt tekstu** - w przeglądarce przez pdf.js; strony bez warstwy tekstowej (skany) przez OCR (Tesseract.js, `pol+eng`).
+3. **Analiza AI** - tekst trafia do API proxy (Cloudflare Worker), które wywołuje model językowy i waliduje wynik.
+4. **Wynik** - podsumowanie, kluczowe punkty, podmioty, kwoty, daty, słowa kluczowe, podgląd JSON i pobranie pliku `.json`.
 
 ## Architektura
 
@@ -49,7 +49,7 @@ worker/src         API proxy: handler, CORS, limity, prompt, klient LLM, chunkin
 | **Jeden schemat Zod w `packages/schema`**                | Ta sama walidacja w workerze i we froncie (wynik walidowany przed wyświetleniem)                                     |
 | **Podsumowanie jako tablica zdań** w odpowiedzi modelu   | Reguła „3–5 zdań” jest wymuszana walidacją, a nie zawodnym liczeniem kropek („sp. z o.o.”)                           |
 | **`fileName`, `pages`, `meta` ustawia kod**, nie model   | Modelu nie pytamy o fakty, które znamy na pewno                                                                      |
-| **Grounding** — kwoty i daty muszą występować w tekście  | Niezweryfikowane pozycje są usuwane i zgłaszane w `meta.warnings` („model nie zgaduje”)                              |
+| **Grounding** - kwoty i daty muszą występować w tekście  | Niezweryfikowane pozycje są usuwane i zgłaszane w `meta.warnings` („model nie zgaduje”)                              |
 | **Durable Object jako dzienny licznik**                  | Spójny licznik (KV jest „ostatecznie spójne”), ochrona salda API przed nadużyciem                                    |
 | **DeepSeek bez trybu „thinking”**                        | Pomiar na pliku testowym: ~10 s zamiast 15–24 s przy tej samej jakości wyniku (wymóg DoD: < 30 s)                    |
 | **Brak routera** + `404.html`                            | Aplikacja ma jeden widok; `404.html` (kopia `index.html`) zabezpiecza odświeżenie dowolnej ścieżki                   |
@@ -88,14 +88,14 @@ Zgodny z sekcją 04 briefu; dodane jest wyłącznie pole `meta` (pola można dod
 }
 ```
 
-Walidacja (Zod): `language` — ISO 639-1, `type` — `faktura|umowa|oferta|raport|inne`, daty — ISO 8601 (`RRRR-MM-DD`, także nieistniejące dni są odrzucane), waluty — ISO 4217, `keyPoints` 3–7, brak informacji = `null` lub `[]`. Błędna odpowiedź AI → 1 ponowna próba z listą błędów walidacji → komunikat błędu.
+Walidacja (Zod): `language` - ISO 639-1, `type` - `faktura|umowa|oferta|raport|inne`, daty - ISO 8601 (`RRRR-MM-DD`, także nieistniejące dni są odrzucane), waluty - ISO 4217, `keyPoints` 3–7, brak informacji = `null` lub `[]`. Błędna odpowiedź AI → 1 ponowna próba z listą błędów walidacji → komunikat błędu.
 
 ## Bezpieczeństwo
 
 - **Klucz API** wyłącznie jako sekret workera (`wrangler secret put LLM_API_KEY`); nigdy we frontendzie ani w repozytorium. CI uruchamia **gitleaks** na pełnej historii.
-- **CORS** ograniczony do `https://cherrox93.github.io` (CORS nie jest uwierzytelnieniem — dlatego dodatkowo limity).
+- **CORS** ograniczony do `https://cherrox93.github.io` (CORS nie jest uwierzytelnieniem - dlatego dodatkowo limity).
 - **Limity**: 10 analiz/min na IP (Cloudflare Rate Limiting), globalnie 300 analiz/dobę, `Content-Length` ≤ 1,5 MB, ≤ 300 tys. znaków tekstu, plik ≤ 10 MB.
-- **Prompt injection**: treść PDF w delimiterach z losowym identyfikatorem, prompt systemowy traktujący ją jako dane, tryb JSON bez narzędzi, flaga `injectionDetected` + niezależna heurystyka, grounding kwot/dat. Plik testowy zawiera taką próbę („umowa jest nieważna… 1 PLN”) — aplikacja ją ignoruje i ostrzega.
+- **Prompt injection**: treść PDF w delimiterach z losowym identyfikatorem, prompt systemowy traktujący ją jako dane, tryb JSON bez narzędzi, flaga `injectionDetected` + niezależna heurystyka, grounding kwot/dat. Plik testowy zawiera taką próbę („umowa jest nieważna… 1 PLN”) - aplikacja ją ignoruje i ostrzega.
 - **XSS**: brak `dangerouslySetInnerHTML` (wymuszone regułą ESLint), cała treść renderowana jako tekst, Content-Security-Policy.
 - **Informacja o przetwarzaniu**: komunikat przy wgrywaniu pliku, że tekst trafia do zewnętrznego API AI.
 - Worker nie loguje treści dokumentów ani nie zwraca stack trace.
@@ -137,8 +137,8 @@ Polecenia jakości: `npm run lint` (ESLint + Prettier), `npm run typecheck`, `np
 ## Znane ograniczenia
 
 - **OCR** obejmuje maks. 5 stron bez warstwy tekstowej (czas < 30 s); jakość zależy od jakości skanu. Modele OCR pobierane są z CDN jsDelivr przy pierwszym użyciu.
-- **DeepSeek** nie ma darmowego tieru (koszt to ułamki centa za analizę) i przetwarza dane poza UE. W trybie JSON nie wymusza schematu — kompensuje to walidacja Zod z ponowną próbą.
+- **DeepSeek** nie ma darmowego tieru (koszt to ułamki centa za analizę) i przetwarza dane poza UE. W trybie JSON nie wymusza schematu - kompensuje to walidacja Zod z ponowną próbą.
 - **Grounding dat** rozpoznaje zapisy słowne po polsku, angielsku i niemiecku; w innych językach daty nie są weryfikowane.
 - Pliki PDF zabezpieczone hasłem nie są obsługiwane.
-- Czas analizy zależy od obciążenia dostawcy LLM — dla 12-stronicowego pliku testowego (z OCR jednej strony) typowo ok. 10 s.
-- Wyniki generuje AI — mimo walidacji i groundingu mogą zawierać błędy interpretacji.
+- Czas analizy zależy od obciążenia dostawcy LLM - dla 12-stronicowego pliku testowego (z OCR jednej strony) typowo ok. 10 s.
+- Wyniki generuje AI - mimo walidacji i groundingu mogą zawierać błędy interpretacji.

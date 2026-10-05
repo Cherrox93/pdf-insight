@@ -42,7 +42,7 @@ export const metaSchema = z.looseObject({
 });
 
 /**
- * Wynik analizy — schemat z sekcji 04 briefu. Pola z briefu są wymagane,
+ * Wynik analizy - schemat z sekcji 04 briefu. Pola z briefu są wymagane,
  * dodatkowe pola są dozwolone (looseObject), `meta` to nasze rozszerzenie.
  */
 export const insightSchema = z.looseObject({

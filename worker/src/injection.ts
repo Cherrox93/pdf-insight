@@ -1,5 +1,5 @@
 /*
- * Deterministyczna heurystyka wykrywania prób prompt injection — działa niezależnie
+ * Deterministyczna heurystyka wykrywania prób prompt injection - działa niezależnie
  * od modelu (model zgłasza to samo przez pole injectionDetected). Wynik służy wyłącznie
  * do ostrzeżenia użytkownika; tekstu nie usuwamy, bo to część treści dokumentu.
  */

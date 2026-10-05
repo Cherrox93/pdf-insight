@@ -54,7 +54,7 @@ export default defineConfig(
         {
           selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']",
           message:
-            'Zakaz dangerouslySetInnerHTML — treść dokumentu renderujemy wyłącznie jako tekst.',
+            'Zakaz dangerouslySetInnerHTML - treść dokumentu renderujemy wyłącznie jako tekst.',
         },
       ],
     },

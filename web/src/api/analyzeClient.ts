@@ -73,7 +73,7 @@ async function readErrorCode(response: Response): Promise<string | null> {
       }
     }
   } catch {
-    // brak treści JSON — użyjemy komunikatu ogólnego
+    // brak treści JSON - użyjemy komunikatu ogólnego
   }
   return null;
 }

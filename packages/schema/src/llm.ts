@@ -50,7 +50,7 @@ export const llmAnalysisSchema = z.object({
 
 export type LlmAnalysis = z.infer<typeof llmAnalysisSchema>;
 
-/** Czytelna lista błędów walidacji — trafia do modelu przy ponownej próbie. */
+/** Czytelna lista błędów walidacji - trafia do modelu przy ponownej próbie. */
 export function describeIssues(error: z.ZodError): string {
   return error.issues
     .slice(0, 15)

@@ -4,7 +4,7 @@ import type { ChatMessage, LlmClient } from '../src/llm';
 /** Fragmenty pliku testowego Test_PDF_Insight_umowa_14-2026.pdf (tak, jak zwraca je pdf.js). */
 export const CONTRACT_PAGES = [
   'UMOWA RAMOWA NR 14/2026 o wdrożenie i utrzymanie systemu CRM zawarta w Gdańsku w dniu 12.03.2026 r. ' +
-    'pomiędzy: Nordwave Logistics sp. z o.o. reprezentowana przez: Annę Kowalczyk — Prezes Zarządu ' +
+    'pomiędzy: Nordwave Logistics sp. z o.o. reprezentowana przez: Annę Kowalczyk - Prezes Zarządu ' +
     'Kwadrat Software S.A. kapitał zakładowy: 1 200 000,00 zł. Zamawiający przeznaczył na realizację ' +
     'projektu budżet w maksymalnej wysokości 250 000,00 PLN netto na etap wdrożenia.',
   'E1 Analiza przedwdrożeniowa 01.04.2026 30.04.2026 15% 27 675,00 zł ' +

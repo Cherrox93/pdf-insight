@@ -96,7 +96,7 @@ export function createOpenAiCompatibleClient(options: OpenAiCompatibleOptions): 
         throw new LlmUnavailableError('Nieoczekiwany format odpowiedzi dostawcy LLM.');
       }
 
-      // Pusta treść lub obcięcie (finish_reason = "length") traktujemy jak błędną odpowiedź —
+      // Pusta treść lub obcięcie (finish_reason = "length") traktujemy jak błędną odpowiedź -
       // zweryfikuje to walidacja i ewentualnie ponowna próba.
       const choice = parsed.data.choices[0];
       return choice?.message.content ?? '';
